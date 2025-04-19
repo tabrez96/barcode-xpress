@@ -39,6 +39,22 @@ barcode-xpress/
 pip install -r requirements.txt
 ```
 
+## Developer Setup
+
+If you're developing or contributing to this project:
+
+1. Install development dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+2. Set up pre-commit hooks:
+
+```bash
+pre-commit install
+```
+
 ## Usage
 
 1. Run the server with:
