@@ -1,0 +1,16 @@
+[tool.ruff]
+# Enable all built-in rules
+select = ["E", "F", "W", "C", "N", "Q", "RUF100", "RET", "S", "T", "A", "B", "D", "I"]
+
+# Exclude specific directories
+exclude = [
+    "__pycache__",
+    ".git",
+    "static",
+    "templates"
+]
+
+# Set the maximum line length
+line-length = 88
+
+# Add any additional configuration options as needed
