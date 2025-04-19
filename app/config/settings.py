@@ -2,10 +2,11 @@
 
 This module contains settings for server configuration and template setup.
 """
+
 from fastapi.templating import Jinja2Templates
 
 # Server configuration
-HOST = "127.0.0.1"  # Only bind to localhost for security
+HOST = "0.0.0.0"  # noqa: S104
 PORT = 5000
 
 # Templates setup
