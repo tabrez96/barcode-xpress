@@ -1,13 +1,20 @@
 """Utilities for simulating keyboard input to applications.
 
 This module provides functionality to send keystrokes to the currently
-focused application.
+focused application across different operating systems using pynput.
 """
-import subprocess
+
+import time
+from typing import Dict
+
+# Import pynput for cross-platform keyboard simulation
+from pynput.keyboard import Controller, Key
 
 
-def send_text_to_active_app(text: str) -> dict:
+def send_text_to_active_app(text: str) -> Dict[str, str]:
     """Send text to the currently focused application by simulating keyboard input.
+
+    Uses pynput for cross-platform support on Windows, macOS, and Linux.
 
     Args:
         text: The text string to send
@@ -18,22 +25,23 @@ def send_text_to_active_app(text: str) -> dict:
 
     Raises
     ------
-        Exception: If there's an error with the AppleScript execution
+        Exception: If there's an error with the keystroke simulation
+
     """
-    # AppleScript to simulate typing in the currently focused application
-    script = f"""
-    tell application "System Events"
-        keystroke "{text}"
-        keystroke return
-    end tell
-    """
+    try:
+        keyboard = Controller()
 
-    result = subprocess.run(["osascript", "-e", script], capture_output=True, text=True)
+        # Type the text
+        keyboard.type(text)
 
-    if result.returncode != 0:
-        raise Exception(f"AppleScript error: {result.stderr}")
+        # Press Enter
+        time.sleep(0.1)  # Small delay before pressing Enter
+        keyboard.press(Key.enter)
+        keyboard.release(Key.enter)
 
-    return {
-        "status": "success",
-        "message": f"Barcode '{text}' sent to active application",
-    }
+        return {
+            "status": "success",
+            "message": f"Barcode '{text}' sent to active application",
+        }
+    except Exception as e:
+        raise Exception(f"Error simulating keyboard input: {str(e)}") from e
