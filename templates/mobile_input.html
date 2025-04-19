@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Barcode Scanner - Mobile{% endblock %}
+
+{% block header %}Barcode Scanner{% endblock %}
+
+{% block content %}
+<div class="flex flex-col items-center">
+    <p class="text-center mb-4 text-gray-600">Scan barcodes from your phone and send them to your computer</p>
+
+    <input
+        type="text"
+        id="text-input"
+        name="barcode"
+        placeholder="Enter or scan barcode"
+        class="border border-gray-300 p-3 rounded w-full max-w-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+        x-ref="textInput"
+        autofocus
+    >
+
+    <button
+        hx-post="/scan"
+        hx-target="#message"
+        hx-swap="innerHTML"
+        hx-include='input[name="barcode"]'
+        hx-disabled-elt="this"
+        class="bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-600 w-full max-w-md"
+        x-on:htmx:after-request="() => {
+            $nextTick(() => {
+                $refs.textInput.value = '';
+                $refs.textInput.focus();
+            });
+        }"
+    >
+        Send to Computer
+    </button>
+</div>
+
+<div id="message" class="mt-4 text-center"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Focus the input field on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('text-input').focus();
+    });
+
+    document.body.addEventListener('htmx:afterRequest', (event) => {
+        const response = event.detail.xhr.response;
+        const messageDiv = document.getElementById('message');
+        try {
+            const data = JSON.parse(response);
+            if (data.status === 'success') {
+                messageDiv.innerHTML = `<div class="text-green-500 font-medium">${data.message}</div>`;
+            } else {
+                messageDiv.innerHTML = `<div class="text-red-500 font-medium">${data.detail || 'Unknown error'}</div>`;
+            }
+        } catch (e) {
+            console.error('Error parsing response:', e);
+            messageDiv.innerHTML = '<div class="text-red-500 font-medium">Error processing response</div>';
+        }
+    });
+</script>
+{% endblock %}
