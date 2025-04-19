@@ -1,0 +1,24 @@
+[package]
+name = "barcode-xpress"
+version = "0.1.0"
+description = "A cross-platform barcode scanner app"
+authors = ["Tabrez Basha"]
+license = "MIT"
+repository = ""
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-beta", features = [] }
+
+[dependencies]
+tauri = { version = "2.0.0-beta", features = [] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tauri-plugin-shell = "2.0.0-beta"
+
+[features]
+# this feature is used for production builds where `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

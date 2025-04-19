@@ -1,0 +1,24 @@
+{
+	"name": "barcode-xpress",
+	"version": "1.0.0",
+	"description": "A cross-platform barcode scanner app that sends keystrokes to active applications",
+	"main": "index.js",
+	"devDependencies": {
+		"@tauri-apps/cli": "^2.0.0",
+		"@tauri-apps/api": "^2.0.0"
+	},
+	"scripts": {
+		"tauri": "tauri",
+		"dev": "tauri dev --config tauri/tauri.conf.json",
+		"build": "tauri build --config tauri/tauri.conf.json",
+		"build:mac-intel": "tauri build --config tauri/tauri.conf.json --target x86_64-apple-darwin",
+		"build:mac-arm": "tauri build --config tauri/tauri.conf.json --target aarch64-apple-darwin",
+		"build:mac": "npm run build:mac-intel && npm run build:mac-arm",
+		"build:win": "tauri build --config tauri/tauri.conf.json --target x86_64-pc-windows-msvc",
+		"build:linux": "tauri build --config tauri/tauri.conf.json --target x86_64-unknown-linux-gnu",
+		"build:all": "npm run build:mac && npm run build:win && npm run build:linux"
+	},
+	"keywords": ["barcode", "scanner", "tauri", "desktop"],
+	"author": "Tabrez Basha",
+	"license": "MIT"
+}

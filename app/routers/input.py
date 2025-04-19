@@ -53,10 +53,14 @@ async def receive_barcode(barcode: Annotated[str, Form()]):
         logger.warning("Received empty barcode")
         raise HTTPException(status_code=400, detail="No barcode data received")
 
-    try:
-        logger.info(f"Processing barcode: {barcode}")
-        return send_text_to_active_app(barcode)
-    except Exception as e:
-        error_msg = str(e)
-        logger.error(f"Error processing barcode: {error_msg}")
-        raise HTTPException(status_code=500, detail=error_msg) from e
+    logger.info(f"Processing barcode: {barcode}")
+    result = send_text_to_active_app(barcode)
+
+    # Check if there was an error
+    if result.get("status") == "error":
+        logger.error(f"Error sending barcode: {result.get('message')}")
+        raise HTTPException(
+            status_code=500, detail=result.get("message", "Unknown error")
+        )
+
+    return result

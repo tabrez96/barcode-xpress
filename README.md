@@ -81,3 +81,38 @@ The application uses the pynput library to simulate keyboard input to whatever a
 ## License
 
 MIT
+
+## Building Native App with Tauri
+
+Barcode Xpress can now be packaged as a native desktop application using Tauri.
+
+### Prerequisites
+
+- Rust toolchain: [Install Rust](https://www.rust-lang.org/tools/install)
+- Node.js and npm: [Install Node.js](https://nodejs.org/)
+- Tauri system dependencies: [Tauri Setup Guide](https://tauri.app/v1/guides/getting-started/prerequisites)
+
+### Simple Build Process
+
+```bash
+# Install dependencies
+npm install
+
+# Run the development version
+npm run dev
+
+# Build for your current platform
+npm run build
+```
+
+The packaged application will be available in `src-tauri/target/release/bundle/`.
+
+This approach is intentionally minimal - it simply:
+1. Launches your Python app in the background
+2. Opens a Tauri window that connects to your FastAPI server
+3. Packages everything into a native application bundle
+
+Benefits over PyInstaller:
+- Smaller, faster applications
+- Better native integration
+- More reliable cross-platform builds
