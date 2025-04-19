@@ -13,4 +13,10 @@ exclude = [
 # Set the maximum line length
 line-length = 88
 
+# Ignore incompatible rules
+ignore = [
+    "D203",  # one-blank-line-before-class
+    "D213",  # multi-line-summary-second-line
+]
+
 # Add any additional configuration options as needed

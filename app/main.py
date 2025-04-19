@@ -1,14 +1,20 @@
+"""Main entry point for the Barcode Input Simulator application.
+
+This module initializes and runs the FastAPI application using Uvicorn.
+"""
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from app.config.settings import HOST, PORT
-from app.routers import barcode
+from app.routers import input
 
 # Create FastAPI app
 app = FastAPI(
     title="Barcode Xpress",
-    description="A simple barcode scanning application",
+    description=(
+        "A barcode scanning application that can send input to any active application"
+    ),
     version="0.1.0"
 )
 
@@ -16,7 +22,7 @@ app = FastAPI(
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include routers
-app.include_router(barcode.router)
+app.include_router(input.router)
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host=HOST, port=PORT, reload=True)

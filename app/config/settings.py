@@ -1,10 +1,11 @@
+"""Application settings and configuration variables.
+
+This module contains settings for server configuration and template setup.
+"""
 from fastapi.templating import Jinja2Templates
 
-# Browser configuration
-BROWSER_NAME = "Google Chrome"  # Change to "Safari" or your browser if needed
-
 # Server configuration
-HOST = "0.0.0.0"
+HOST = "127.0.0.1"  # Only bind to localhost for security
 PORT = 5000
 
 # Templates setup

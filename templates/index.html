@@ -4,11 +4,11 @@
 <div class="flex flex-col items-center">
     <input
         type="text"
-        id="barcode-input"
+        id="text-input"
         name="barcode"
         placeholder="Enter barcode"
         class="border border-gray-300 p-2 rounded w-full max-w-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        x-ref="barcodeInput"
+        x-ref="textInput"
     >
     <button
         hx-post="/scan"
@@ -19,7 +19,7 @@
         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         x-on:htmx:after-request="() => {
             $nextTick(() => {
-                $refs.barcodeInput.value = '';
+                $refs.textInput.value = '';
             });
         }"
     >
