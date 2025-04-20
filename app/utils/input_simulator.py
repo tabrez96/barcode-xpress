@@ -24,11 +24,11 @@ def send_text_to_active_app(text: str) -> Dict[str, str]:
     Args:
         text: The text string to send
 
-    Returns
+    Returns:
     -------
         dict: Result status and message
 
-    Raises
+    Raises:
     ------
         Exception: If there's an error with the keystroke simulation
 

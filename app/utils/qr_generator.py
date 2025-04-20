@@ -18,9 +18,10 @@ def generate_qr_code(data: str) -> PilImage:
     Args:
         data: The data to encode in the QR code
 
-    Returns
+    Returns:
     -------
         A PIL image containing the QR code
+
     """
     logger.debug(f"Generating QR code for data: {data}")
     qr = qrcode.QRCode(
@@ -43,9 +44,10 @@ def get_qr_code_as_base64(data: str) -> str:
     Args:
         data: The data to encode in the QR code
 
-    Returns
+    Returns:
     -------
         A base64-encoded string containing the QR code image
+
     """
     logger.info(f"Creating base64 QR code for URL: {data}")
     img = generate_qr_code(data)
