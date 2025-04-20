@@ -16,7 +16,7 @@ def setup_logger(name: str, level: Optional[int] = None) -> logging.Logger:
         name: The logger name
         level: The logging level (defaults to INFO)
 
-    Returns
+    Returns:
     -------
         A configured logger instance
 

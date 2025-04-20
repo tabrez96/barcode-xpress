@@ -2,12 +2,13 @@
 
 This module initializes and runs the FastAPI application using Uvicorn.
 """
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from app.config.settings import HOST, PORT
-from app.routers import input
+from app.routers import input as input_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -15,14 +16,14 @@ app = FastAPI(
     description=(
         "A barcode scanning application that can send input to any active application"
     ),
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include routers
-app.include_router(input.router)
+app.include_router(input_router.router)
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host=HOST, port=PORT, reload=True)
