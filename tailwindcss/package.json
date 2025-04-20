@@ -1,0 +1,19 @@
+{
+	"name": "barcode-xpress",
+	"version": "1.0.0",
+	"description": "A fully functional FastAPI-based application that scans barcodes and sends them to any active application by simulating keystrokes. Works on Windows, macOS, and Linux.",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"css:build": "tailwindcss -i ./src/main.css -o ../static/css/style.css --minify",
+		"css:watch": "tailwindcss -i ./src/main.css -o ../static/css/style.css --watch"
+	},
+	"keywords": [],
+	"author": "Tabrez Basha",
+	"license": "MIT",
+	"devDependencies": {
+		"autoprefixer": "^10.4.21",
+		"cross-env": "^7.0.3",
+		"postcss": "^8.5.3",
+		"tailwindcss": "^3.4.17"
+	}
+}
