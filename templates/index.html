@@ -40,25 +40,7 @@
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
 
-{% block scripts %}
-<script>
-    document.body.addEventListener('htmx:afterRequest', (event) => {
-        const response = event.detail.xhr.response;
-        const messageDiv = document.getElementById('message');
-        try {
-            const data = JSON.parse(response);
-            if (data.status === 'success') {
-                messageDiv.innerHTML = `<div class="text-success">${data.message}</div>`;
-            } else {
-                messageDiv.innerHTML = `<div class="text-error">${data.detail || 'Unknown error'}</div>`;
-            }
-        } catch (e) {
-            console.error('Error parsing response:', e);
-            messageDiv.innerHTML = '<div class="text-error">Error processing response</div>';
-        }
-    });
-</script>
+    <div id="message" class="mt-4 text-center"></div>
+</div>
 {% endblock %}

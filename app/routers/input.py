@@ -5,10 +5,11 @@ This module defines endpoints for serving the UI and processing barcode input.
 
 from typing import Annotated
 
-from fastapi import APIRouter, Form, HTTPException, Request
+from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
-from app.config.settings import PORT, templates
+from app.config.settings import PORT
+from app.templates import render_template
 from app.utils.input_simulator import send_text_to_active_app
 from app.utils.logger import setup_logger
 from app.utils.network import get_local_ip
@@ -27,13 +28,16 @@ async def serve_desktop_ui(request: Request):
 
     # Generate QR code URL for connecting from mobile devices
     local_ip = get_local_ip()
-    mobile_url = f"http://{local_ip}:{PORT}"
+    runtime_port = getattr(request.app.state, "port", PORT)
+    mobile_url = f"http://{local_ip}:{runtime_port}"
     logger.info(f"Generated mobile URL: {mobile_url}/scan")
 
     qr_code = get_qr_code_as_base64(f"{mobile_url}/scan")
 
-    return templates.TemplateResponse(
-        "index.html", {"request": request, "qr_code": qr_code, "mobile_url": mobile_url}
+    return render_template(
+        request=request,
+        template_name="index.html",
+        context={"qr_code": qr_code, "mobile_url": mobile_url},
     )
 
 
@@ -43,20 +47,44 @@ async def serve_mobile_ui(request: Request):
     client = request.client.host if request.client else "unknown"
     logger.info(f"Serving mobile UI to client: {client}")
 
-    return templates.TemplateResponse("mobile_input.html", {"request": request})
+    return render_template(request=request, template_name="mobile_input.html")
 
 
-@router.post("/scan")
-async def receive_barcode(barcode: Annotated[str, Form()]):
-    """Receives a barcode via form submission and sends it to the active application."""
-    if not barcode:
+@router.post("/scan", response_class=HTMLResponse)
+async def receive_barcode(request: Request, barcode: Annotated[str, Form()] = ""):
+    """Receive barcode via HTMX and send it to the active application.
+
+    Returns a partial HTML fragment with success/error message.
+    """
+    if not barcode.strip():
         logger.warning("Received empty barcode")
-        raise HTTPException(status_code=400, detail="No barcode data received")
+        return render_template(
+            request=request,
+            template_name="partials/message.html",
+            context={"message": "No barcode data received", "message_type": "error"},
+        )
 
     try:
         logger.info(f"Processing barcode: {barcode}")
-        return send_text_to_active_app(barcode)
-    except Exception as e:
-        error_msg = str(e)
+        send_text_to_active_app(barcode)
+    except Exception as exc:
+        error_msg = str(exc)
         logger.error(f"Error processing barcode: {error_msg}")
-        raise HTTPException(status_code=500, detail=error_msg) from e
+        return render_template(
+            request=request,
+            template_name="partials/message.html",
+            context={
+                "message": error_msg,
+                "message_type": "error",
+            },
+            status_code=500,
+        )
+
+    return render_template(
+        request=request,
+        template_name="partials/message.html",
+        context={
+            "message": f"Barcode '{barcode}' sent to active application",
+            "message_type": "success",
+        },
+    )

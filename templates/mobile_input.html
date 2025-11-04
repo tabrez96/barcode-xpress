@@ -5,61 +5,39 @@
 {% block header %}Barcode Scanner{% endblock %}
 
 {% block content %}
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" x-data>
     <p class="text-center mb-4 text-text-secondary">Scan barcodes from your phone and send them to your computer</p>
 
-    <input
-        type="text"
-        id="text-input"
-        name="barcode"
-        placeholder="Enter or scan barcode"
-        class="border border-border p-3 rounded-lg w-full max-w-md mb-4 focus:outline-none focus:shadow-focus text-lg bg-bg-soft text-text"
-        x-ref="textInput"
-        autofocus
-    >
-
-    <button
+    <form
         hx-post="/scan"
         hx-target="#message"
         hx-swap="innerHTML"
-        hx-include='input[name="barcode"]'
-        hx-disabled-elt="this"
-        class="bg-primary text-bg px-6 py-3 rounded-lg text-lg font-medium hover:bg-secondary transition-colors w-full max-w-md"
-        x-on:htmx:after-request="() => {
-            $nextTick(() => {
-                $refs.textInput.value = '';
-                $refs.textInput.focus();
-            });
-        }"
+        @htmx:after-request="$event.detail.successful && ($el.reset(), $refs.barcodeInput.focus())"
     >
-        Send to Computer
-    </button>
+        <input
+            type="text"
+            id="text-input"
+            name="barcode"
+            placeholder="Enter or scan barcode"
+            class="border border-border p-3 rounded-lg w-full max-w-md mb-4 focus:outline-none focus:shadow-focus text-lg bg-bg-soft text-text"
+            autofocus
+            x-ref="barcodeInput"
+        >
+
+        <button
+            type="submit"
+            class="bg-primary text-bg px-6 py-3 rounded-lg text-lg font-medium hover:bg-secondary transition-colors w-full max-w-md"
+        >
+            Send to Computer
+        </button>
+    </form>
+
+    <div id="message" class="mt-4 text-center">
+        {% if message %}
+        <div class="text-{{ 'success' if message_type == 'success' else 'error' }} font-medium">
+            {{ message }}
+        </div>
+        {% endif %}
+    </div>
 </div>
-
-<div id="message" class="mt-4 text-center"></div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-    // Focus the input field on page load
-    window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('text-input').focus();
-    });
-
-    document.body.addEventListener('htmx:afterRequest', (event) => {
-        const response = event.detail.xhr.response;
-        const messageDiv = document.getElementById('message');
-        try {
-            const data = JSON.parse(response);
-            if (data.status === 'success') {
-                messageDiv.innerHTML = `<div class="text-success font-medium">${data.message}</div>`;
-            } else {
-                messageDiv.innerHTML = `<div class="text-error font-medium">${data.detail || 'Unknown error'}</div>`;
-            }
-        } catch (e) {
-            console.error('Error parsing response:', e);
-            messageDiv.innerHTML = '<div class="text-error font-medium">Error processing response</div>';
-        }
-    });
-</script>
 {% endblock %}

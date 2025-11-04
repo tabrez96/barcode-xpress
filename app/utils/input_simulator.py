@@ -5,7 +5,6 @@ focused application across different operating systems using pynput.
 """
 
 import time
-from typing import Dict
 
 # Import pynput for cross-platform keyboard simulation
 from pynput.keyboard import Controller, Key
@@ -16,7 +15,7 @@ from app.utils.logger import setup_logger
 logger = setup_logger("barcode_xpress.input_simulator")
 
 
-def send_text_to_active_app(text: str) -> Dict[str, str]:
+def send_text_to_active_app(text: str) -> bool:
     """Send text to the currently focused application by simulating keyboard input.
 
     Uses pynput for cross-platform support on Windows, macOS, and Linux.
@@ -26,7 +25,7 @@ def send_text_to_active_app(text: str) -> Dict[str, str]:
 
     Returns:
     -------
-        dict: Result status and message
+        bool: True if successful
 
     Raises:
     ------
@@ -48,10 +47,7 @@ def send_text_to_active_app(text: str) -> Dict[str, str]:
         logger.debug("Enter key pressed")
 
         logger.info(f"Successfully sent barcode: '{text}'")
-        return {
-            "status": "success",
-            "message": f"Barcode '{text}' sent to active application",
-        }
+        return True
     except Exception as e:
         error_msg = f"Error simulating keyboard input: {str(e)}"
         logger.error(error_msg)
