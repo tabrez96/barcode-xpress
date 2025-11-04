@@ -1,1 +1,8 @@
 node_modules/
+.pyinstaller/
+build/
+dist/
+barcode-xpress.app/
+.DS_Store
+.envrc
+.bump*
