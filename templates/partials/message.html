@@ -1,5 +1,5 @@
-<div id="message" class="mt-4 text-center">
-    {% if message %}
-        <div class="text-{{ message_type|default('green-500') }}">{{ message }}</div>
-    {% endif %}
+{% if message %}
+<div class="text-{{ 'success' if message_type == 'success' else 'error' }} font-medium">
+    {{ message }}
 </div>
+{% endif %}
