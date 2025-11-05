@@ -1,0 +1,20 @@
+# CodeRabbit Configuration
+# Documentation: https://docs.coderabbit.ai/guides/configure-coderabbit
+
+# Enable reviews only for PRs targeting master branch
+reviews:
+  # Allow reviews on PRs targeting master branch only
+  auto_review:
+    enabled: true
+    base_branches:
+      - "master"  # Review PRs targeting master branch only
+
+  # Show review status messages
+  review_status: true
+
+# Language for CodeRabbit's responses (not programming language)
+language: en-US
+
+# Enable high-level summary
+chat:
+  auto_reply: true
