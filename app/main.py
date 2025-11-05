@@ -194,7 +194,7 @@ def main() -> None:
         app.state.port = requested_port
         open_browser_later(requested_port)
         uvicorn.run(
-            app=app,
+            app="app.main:app",
             host=HOST,
             port=requested_port,
             reload=True,
